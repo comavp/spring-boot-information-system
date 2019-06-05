@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Genre List</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        th, td {
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body>
+<th:block th:include="/menu"></th:block>
+
+<h2>Genre List</h2>
+<div>
+    <a th:href="@{/addGenre}">Add Genre</a>
+    |&nbsp;
+    <a th:href="@{'/genreFilter/{filterMethod}' (filterMethod = 'Raiting')}">Sort by raiting</a>
+</div>
+<br/><br/>
+<div>
+    <table  border="1">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Raiting</th>
+            <th>Edit</th>
+            <th>Delete</th>
+            <th>Get artists</th>
+        </tr>
+        <tr th:each="genre : ${genres}">
+            <td th:utext="${genre.id}"></td>
+            <td th:utext="${genre.name}"></td>
+            <td th:utext="${genre.raiting}"></td>
+            <td><a th:href="@{'/editGenre/{id}'(id=${genre.id})}">edit</a></td>
+            <td><a th:href="@{'/deleteGenre/{id}'(id=${genre.id})}">delete</a></td>
+            <td><a th:href="@{'/getArtistsByGenre/{id}'(id=${genre.id})}">get artists</a></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
