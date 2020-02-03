@@ -6,7 +6,7 @@
 </head>
 <body>
     <th:block th:include="/menu"></th:block>
-    <h1>Welcome</h1>
+    <h1 th:inline="text">Hello, <span th:text="${name}"></span>!</h1>
     <!--<h2 th:utext="${message}">!!!</h2>-->
 </body>
 </html>

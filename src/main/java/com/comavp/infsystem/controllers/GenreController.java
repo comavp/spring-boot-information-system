@@ -5,6 +5,7 @@ import com.comavp.infsystem.entities.Genre;
 import com.comavp.infsystem.service.GenreService;
 import com.comavp.infsystem.service.iservice.IGenreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,17 +50,20 @@ public class GenreController {
     }
 
     @RequestMapping(value = { "/addGenre" }, method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('MODERATOR')")
     public String showAddGenrePage(Model model) {
         return "addGenre";
     }
 
     @RequestMapping(value = {"/addGenre"}, method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('MODERATOR')")
     public String addGenre(@RequestParam String name, @RequestParam String raiting) {
         genreService.saveGenre(new Genre(name, toIntegerSafe(raiting)));
         return "redirect:/genreList";
     }
 
     @RequestMapping(value = "/deleteGenre/{id}", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('MODERATOR')")
     public String deleteGenre(@PathVariable Integer id) {
         for (Artist artist : genreService.getGenreById(id).getArtists()) {
             artist.getGenres().remove(genreService.getGenreById(id));
@@ -70,6 +74,7 @@ public class GenreController {
     }
 
     @RequestMapping(value = "/editGenre/{id}", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('MODERATOR')")
     public String showEditGenrePage(@PathVariable Integer id, Model model) {
         Genre genre = genreService.getGenreById(id);
         model.addAttribute("genre", genre);
@@ -77,6 +82,7 @@ public class GenreController {
     }
 
     @RequestMapping(value = "/editGenre", method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('MODERATOR')")
     public String editGenre(@RequestParam Integer id, @RequestParam String name, @RequestParam String raiting) {
         genreService.updateGenre(id, name, toIntegerSafe(raiting));
         return "redirect:/genreList";

@@ -68,6 +68,11 @@ public class TrackService implements ITrackService {
         return trackRepository.findTracksByArtists(artist);
     }
 
+    @Override
+    public List<Track> findTracksByAlbum(String album) {
+        return trackRepository.findTracksByAlbum(album);
+    }
+
 //    @Override
 //    public List<Track> findTracksByArtistsByLengthAsc(String name) {
 //        return trackRepository.findTracksByArtistsByLengthAsc(name);

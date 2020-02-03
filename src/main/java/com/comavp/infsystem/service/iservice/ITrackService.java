@@ -15,5 +15,6 @@ public interface ITrackService {
     List<Track> findAllByOrderByAlbumAsc();
     List<Track> findTracksByArtists(Artist artist);
 
+    List<Track> findTracksByAlbum(String album);
     //List<Track> findTracksByArtistsByLengthAsc(String name);
 }

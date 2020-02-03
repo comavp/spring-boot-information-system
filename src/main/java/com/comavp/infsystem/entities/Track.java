@@ -25,7 +25,7 @@ public class Track {
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
-                CascadeType.PERSIST, CascadeType.MERGE
+                    CascadeType.PERSIST, CascadeType.MERGE
             })
     @JoinTable(name = "artist_track",
             joinColumns = {@JoinColumn(name = "track_id")},

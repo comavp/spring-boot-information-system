@@ -8,7 +8,11 @@
 
 <body>
 
-    <h2>This page hasn't been done yet</h2>
+    <h2>Find track by album:</h2>
+    <form th:action="@{/findTrack}" method="post">
+        <input type="text" id="name" placeholder="Name" th:name="name"/>
+        <input type="submit" value="Find Track"/>
+    </form>
 
 </body>
 </html>

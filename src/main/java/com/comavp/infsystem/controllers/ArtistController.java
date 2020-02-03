@@ -8,6 +8,7 @@ import com.comavp.infsystem.service.GenreService;
 import com.comavp.infsystem.service.iservice.IArtistService;
 import com.comavp.infsystem.service.iservice.IGenreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -71,6 +72,7 @@ public class ArtistController {
     }
 
     @RequestMapping(value = { "/addArtist" }, method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('MODERATOR')")
     public String showAddArtistPage(Model model) {
         model.addAttribute("genres", genreService.findAll());
 
@@ -78,6 +80,7 @@ public class ArtistController {
     }
 
     @RequestMapping(value = {"/addArtist"}, method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('MODERATOR')")
     public String addArtist(@RequestParam String name, @RequestParam String country, @RequestParam String age,
                             @RequestParam(value = "genresIdList", required = false) List<Integer> genreIdList) {
         Artist artist = new Artist(name, country, toIntegerSafe(age));
@@ -98,6 +101,7 @@ public class ArtistController {
     }
 
     @RequestMapping(value = "/deleteArtist/{id}", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('MODERATOR')")
     public String deleteArtist(@PathVariable Integer id) {
         for (Track track : artistService.getArtistById(id).getTracks()) {
             track.getArtists().remove(artistService.getArtistById(id));
@@ -107,6 +111,7 @@ public class ArtistController {
     }
 
     @RequestMapping(value = "/editArtist/{id}", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('MODERATOR')")
     public String showEditArtistPage(@PathVariable Integer id, Model model) {
         Artist artist = artistService.getArtistById(id);
         List<Genre> newGenres = genreService.findAll();
@@ -125,6 +130,7 @@ public class ArtistController {
     }
 
     @RequestMapping(value = "/editArtist", method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('MODERATOR')")
     public String editArtist(@RequestParam Integer id, @RequestParam String name, @RequestParam String country, @RequestParam String age,
                              @RequestParam(value = "oldGenreIdList", required = false) List<Integer> oldGenreIdList,
                              @RequestParam(value = "genreIdList", required = false) List<Integer> genreIdList) {

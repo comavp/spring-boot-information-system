@@ -17,4 +17,5 @@ public interface TrackRepository extends JpaRepository<Track, Integer> {
 //    @Query(value = "select t from Track t inner join artist_track at on t.id = at.track_id inner join Artist a on at.artist_id = t.id where a.name = ?1",
 //            nativeQuery = true)
 //    List<Track> findTracksByArtistsByLengthAsc(String name);
+    List<Track> findTracksByAlbum(String album);
 }

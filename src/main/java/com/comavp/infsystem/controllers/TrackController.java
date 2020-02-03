@@ -7,6 +7,7 @@ import com.comavp.infsystem.service.TrackService;
 import com.comavp.infsystem.service.iservice.IArtistService;
 import com.comavp.infsystem.service.iservice.ITrackService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ public class TrackController {
 
     private String filterMethod = "Id";
     private Integer currentArtistId = -1;
+    private String currentAlbumName = "";
 
     @Autowired
     public void setTrackService(TrackService trackService) {
@@ -38,12 +40,14 @@ public class TrackController {
     }
 
     @RequestMapping(value = { "/addTrack" }, method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('MODERATOR')")
     public String showAddTrackPage(Model model) {
         model.addAttribute("artists", artistService.findAll());
         return "addTrack";
     }
 
     @RequestMapping(value = {"/addTrack"}, method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('MODERATOR')")
     public String addTrack(@RequestParam String name, @RequestParam String album, @RequestParam String length,
                            @RequestParam(value = "artistIdList", required = false) List<Integer> artistIdList) {
 
@@ -62,12 +66,14 @@ public class TrackController {
     }
 
     @RequestMapping(value = "/deleteTrack/{id}", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('MODERATOR')")
     public String deleteTrack(@PathVariable Integer id) {
         trackService.deleteTrack(id);
         return "redirect:/trackList";
     }
 
     @RequestMapping(value = "/editTrack/{id}", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('MODERATOR')")
     public String showEditTrackPage(@PathVariable Integer id, Model model) {
         Track track = trackService.getTrackById(id);
         List<Artist> newArtists = artistService.findAll();
@@ -86,6 +92,7 @@ public class TrackController {
     }
 
     @RequestMapping(value = "/editTrack", method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('MODERATOR')")
     public String editTrack(@RequestParam Integer id, @RequestParam String name, @RequestParam String album, @RequestParam String length,
                             @RequestParam(value = "oldArtistIdList", required = false) List<Integer> oldArtistIdList,
                             @RequestParam(value = "artistIdList", required = false) List<Integer> artistIdList ) {
@@ -139,6 +146,9 @@ public class TrackController {
                 break;
             case "AlbumArtist":
                 break;
+            case "Find":
+                tracks = trackService.findTracksByAlbum(currentAlbumName);
+                break;
         }
         return tracks;
     }
@@ -166,5 +176,12 @@ public class TrackController {
             tmLength = 0;
         }
         return tmLength;
+    }
+
+    @RequestMapping(value="findTrack", method= RequestMethod.POST)
+    public String findTrackByAlbum(@RequestParam String name) {
+        currentAlbumName = name;
+        filterMethod = "Find";
+        return "redirect:/trackList";
     }
 }

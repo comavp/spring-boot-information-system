@@ -8,4 +8,9 @@
     <a th:href="@{'/genreFilter/{filterMethod}' (filterMethod = 'All')}">Genre List</a>
     |&nbsp;
     <a th:href="@{/findTrack}">Find Track</a>
+    |&nbsp;
+    <a th:href="@{/userList}">User List</a>
+    <form th:action="@{/logout}" method="post" th:align="right">
+        <input type="submit" value="Sign Out"/>
+    </form>
 </div>
